@@ -30,8 +30,13 @@
 % sum(0) -> 0;
 % sum(N) when N > 0 -> N + sum(N-1).
 
--export([length/1]).
+% -export([my_length/1]).
 
-length([]) -> 0;
-length([_Head | Tail]) -> 1 + length(Tail).
+% my_length([]) -> 0;
+% my_length([_Head | Tail]) -> 1 + my_length(Tail).
 
+-export([fact/1]).
+
+fact(0)-> 1;
+fact(N) when N > 0 -> N * fact(N - 1);
+fact(N) when N < 0 -> io:format("This is not allowed ~n").
