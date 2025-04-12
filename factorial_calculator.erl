@@ -3,47 +3,70 @@
 
 % The export shows the functions that can be accessed outside of the module
 % the number after the "/" is the number of arguments (arity)
--export([start/0, loop/0]).
+-export([start_factorial/0,start_list/0, factorial_loop/0, createList_loop/1]).
 
 % This function starts creating a new process
-start()->
+start_factorial()->
   % The new process will use the current module with function loop and zero arguments
-  spawn(?MODULE,loop,[]).
+  spawn(?MODULE,factorial_loop,[]).
 
-% This function creates a loop with recursion
-loop() ->
-  % the receiver checks for specific inputs
+start_list()->
+  spawn(?MODULE, createList_loop,[[]]).
+
+
+factorial_loop() ->
+
   receive
-    % checks for the message structure
-    % factorial tag and sends the process that called the function
-    % positive numbers
-    {factorial, From, N} when N >= 0 ->
-      % the Result is sent back the process (shell)
-      Result = fact(N),
-      From ! {result, N, Result},
-      % calls itself again
-      loop();
 
-    %checks for negative numbers
-    {factorial, _, N} when N< 0 ->
-      io:format("Impossible to compute, it is a negative number: ~p~n", [N]),
-      loop();
+    {factorial, From, NumberList} ->
+      % Lambda function to check numbers if they are negative
+      NonNegative = fun(X) -> X>=0 end,
+      % sorts list to a list of only positives
+      Positives = lists:filter(NonNegative,NumberList),
 
-    % stops the process
+
+
+      Result = lists:map(fun (X) -> fact(X) end,Positives),
+      From ! {result, Result},
+
+      factorial_loop();
+
+
     stop ->
       io:format("stopping the process ~n"),
       ok;
 
-    % checks for any other format message sent
+
     _ ->
       io:format("This is embarrassing I don't understand what you said! :/ ~n"),
-      loop()
+      factorial_loop()
   end.
+
+createList_loop(CurrentList) ->
+  receive
+    {newNumber, N } when is_number(N) ->
+      NewList = [N | CurrentList],
+      createList_loop(NewList);
+    {calculate, From, To} ->
+      To !{factorial, From , CurrentList},
+      NewList = [],
+      createList_loop(NewList);
+
+    stop ->
+      io:format("stopping the process ~n"),
+      ok;
+
+    _ ->
+      io:format("sorry I didn't get that ~n"),
+      createList_loop(CurrentList)
+  end.
+
+
 
 % this checks for the factorial cases
 % base case in recursion
 fact(0)-> 1;
 % recursive guard when N is positive using recursion
-fact(N) when N > 0 -> N * fact(N - 1);
-% guard whenever there is a negative number
-fact(N) when N < 0 -> io:format("This is not allowed ~n").
+fact(N) when N > 0 -> N * fact(N - 1).
+
+
