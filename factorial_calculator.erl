@@ -19,7 +19,8 @@ factorial_loop() ->
 
     {factorial, From, NumberList} ->
       % Lambda function to check numbers if they are negative
-      NonNegative = fun(X) -> X>=0 end,
+      NonNegative = fun(X) ->
+        X>=0 end,
       % sorts list to a list of only positives
       Positives = lists:filter(NonNegative,NumberList),
       Result = lists:map(fun (X) -> fact(X) end,Positives),
@@ -30,6 +31,7 @@ factorial_loop() ->
 
     stop ->
       io:format("stopping the process ~n"),
+      io:format("factorial is not listening ~n"),
       ok;
 
     _ ->
@@ -49,6 +51,7 @@ createList_loop(CurrentList) ->
 
     stop ->
       io:format("stopping the process ~n"),
+      io:format("List is not listening ~n"),
       ok;
 
     _ ->
@@ -62,7 +65,8 @@ createList_loop(CurrentList) ->
 % base case in recursion
 fact(0)-> 1;
 % recursive guard when N is positive using recursion
-fact(N) when N > 0 -> N * fact(N - 1).
+fact(N) when N > 0 ->
+  N * fact(N - 1).
 
 
 menu(ListPid, FactorialPid) ->
