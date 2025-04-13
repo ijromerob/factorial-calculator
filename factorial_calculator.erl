@@ -3,7 +3,7 @@
 
 % The export shows the functions that can be accessed outside of the module
 % the number after the "/" is the number of arguments (arity)
--export([start_factorial/0,start_list/0, factorial_loop/0, createList_loop/1]).
+-export([start_factorial/0,start_list/0, factorial_loop/0, createList_loop/1, menu/2]).
 
 % This function starts creating a new process
 start_factorial()->
@@ -70,3 +70,61 @@ fact(0)-> 1;
 fact(N) when N > 0 -> N * fact(N - 1).
 
 
+menu(ListPid, FactorialPid) ->
+  % Start of the menu with options
+  io:format("~n -------------------Factorial Calculator Menu------------------- ~n"),
+  io:format("1. Add number to list~n"),
+  io:format("2. Calculate factorials~n"),
+  io:format("3. Exit~n"),
+  io:format("Choose an option: "),
+    % Reads the lines and matches it with the options that are provided
+    case io:get_line("") of
+        "1\n" ->
+            io:format("Enter a number: "),
+            case io:get_line("") of
+                Line ->
+                    % First it tries to to convert to a float
+                    case string:to_float(string:trim(Line)) of
+                        {error, _} ->
+                            % if returns an error, it tries to return an integer
+                            case string:to_integer(string:trim(Line)) of
+                                {Int, _} ->
+                                    % it is sent to the ListPid the new number
+                                    ListPid ! {newNumber, Int},
+                                    io:format("Added ~p to the list.~n", [Int]);
+                                % if it is unsuccessful, it is deemed as an invalid input
+                                _ ->
+                                    io:format("Invalid input!~n")
+                            end;
+                        {Float, _} ->
+                            % it is sent to the ListPid the new number
+                            ListPid ! {newNumber, Float},
+                            io:format("Added ~p to the list.~n", [Float])
+                    end,
+                    % Continue with recursion
+                    menu(ListPid, FactorialPid)
+            end;
+
+        "2\n" ->
+            % Send the calculate instruction with the list
+            ListPid ! {calculate, self(), FactorialPid},
+            receive
+              % if there is a response, it will be displayed
+                {result, ResultList} ->
+                    io:format("Factorials: ~p~n", [ResultList])
+            end,
+            % continue with recursion
+            menu(ListPid, FactorialPid);
+
+        % stops the program
+        "3\n" ->
+            % stops the processes
+            ListPid ! stop,
+            FactorialPid ! stop,
+            io:format("Goodbye!~n"),
+            ok;
+
+        _ ->
+            io:format("Invalid option!~n"),
+            menu(ListPid, FactorialPid)
+    end.
