@@ -3,7 +3,7 @@
 In this program I am seeking to learn more about the Erlang language. This software creates (spawns) 2 processes, one creates a list and keeps adding the list until is time to calculate the factorial when is sent to the second process.
 Previous to the calculation of the factorial to each list member, there are some checks performed. Later is returned to the shell process to display the list.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/F9LnL2ixG3Y)
 
 # Development Environment
 
