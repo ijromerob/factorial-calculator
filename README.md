@@ -1,35 +1,23 @@
 # Overview
 
-{Talk about what you are trying to accomplish as a software engineer to further your learning.}
-
-{Provide a description for the software that you wrote to demonstrate the Erlang language.}
-
-{Describe your purpose for writing this software.}
-
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
+In this program I am seeking to learn more about the Erlang language. This software creates (spawns) 2 processes, one creates a list and keeps adding the list until is time to calculate the factorial when is sent to the second process.
+Previous to the calculation of the factorial to each list member, there are some checks performed. Later is returned to the shell process to display the list.
 
 [Software Demo Video](http://youtube.link.goes.here)
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
-
-- Erlang 13.2.2.5
+- VS Code
+- Erlang 15.2.4
 - Rebar3
-
-{Describe the programming language that you used and any libraries.}
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-
-- [Web Site Name](http://url.link.goes.here)
-- [Web Site Name](http://url.link.goes.here)
+- [YouTube - Erlang Tutorial](https://www.youtube.com/watch?v=IEhwc2q1zG4&t=676s&ab_channel=DerekBanas)
+- [functions (funs) - Erlang Documentation](https://www.erlang.org/doc/system/funs.html)
+- [Pattern Matching](https://www.erlang.org/doc/system/patterns.html)
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
-
-- Item 1
-- Item 2
-- Item 3
+- starting different processes from the menu
+- improve defensive programming techniques with try catch blocks

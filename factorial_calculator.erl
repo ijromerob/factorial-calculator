@@ -13,7 +13,6 @@ start_factorial()->
 start_list()->
   spawn(?MODULE, createList_loop,[[]]).
 
-
 factorial_loop() ->
 
   receive
@@ -23,9 +22,6 @@ factorial_loop() ->
       NonNegative = fun(X) -> X>=0 end,
       % sorts list to a list of only positives
       Positives = lists:filter(NonNegative,NumberList),
-
-
-
       Result = lists:map(fun (X) -> fact(X) end,Positives),
       From ! {result, Result},
 
@@ -35,7 +31,6 @@ factorial_loop() ->
     stop ->
       io:format("stopping the process ~n"),
       ok;
-
 
     _ ->
       io:format("This is embarrassing I don't understand what you said! :/ ~n"),
